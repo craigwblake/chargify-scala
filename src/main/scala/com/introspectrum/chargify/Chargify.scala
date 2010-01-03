@@ -15,7 +15,7 @@ case class Chargify( key: String, domain: String) extends Customers {
 
 	val client = new HttpClient()
 	client.getParams().setAuthenticationPreemptive( true)
-	client.getState().setCredentials( new AuthScope( domain + ".chargify.com", 443, AuthScope.ANY_REALM), new UsernamePasswordCredentials( key, "x"))
+	client.getState().setCredentials( new AuthScope( domain + ".chargify.com", 443, "Chargify API"), new UsernamePasswordCredentials( key, "x"))
 	client.setHostConfiguration( host)
 
 	def getClient() = client
