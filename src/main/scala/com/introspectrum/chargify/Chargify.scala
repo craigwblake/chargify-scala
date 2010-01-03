@@ -17,7 +17,22 @@ case class Chargify( key: String, domain: String) {
 	implicit def nodeseq2int( value: NodeSeq) = Integer.parseInt( value.first.text)
 	
 	implicit def nodeseq2customer( r: NodeSeq): Customer = {
-		Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"createdAt", r\"updatedAt")
+		// More flexible XML structure?
+		//Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"createdAt", r\"updatedAt")
+		r match {
+			case <customer>
+					<id>{id}</id>
+					<first_name>{firstName}</first_name>
+					<last_name>{lastName}</last_name>
+					<email>{email}</email>
+					<organization>{organization}</organization>
+					<reference>{reference}</reference>
+					<createdAt>{createdAt}</createdAt>
+					<updatedAt>{updatedAt}</updatedAt>
+				</customer>
+				=> Customer( id, firstName, lastName, email, organization, reference, createdAt, updatedAt)
+			case x => throw new RuntimeException( "Failed matching customer record: " + x)
+		}
 	}
 
 	val client = new HttpClient()
@@ -46,6 +61,13 @@ case class Chargify( key: String, domain: String) {
 		} catch {
 			case e: NotFoundException => None
 		}
+	}
+
+	def deleteCustomer( id: String) = {
+		val method = new DeleteMethod( host + "customers/" + id + ".xml")
+		client.executeMethod( method)
+		handleResponseCode( method)
+		Some( parseReponse( method))
 	}
 
 	def createCustomer( firstName: String, lastName: String, email: String): Customer = {
