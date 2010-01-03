@@ -6,7 +6,7 @@ import java.util.TimeZone
 
 object DateTime {
 
-	val Pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+	val Pattern = "yyyy-MM-dd'T'HH:mm:ssZ"
 
 	def parse( date: String): Date = {
 		val format = new SimpleDateFormat( Pattern)
