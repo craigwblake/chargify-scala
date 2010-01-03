@@ -11,22 +11,7 @@ trait Customers {
 	def getClient(): HttpClient
 
 	implicit def nodeseq2customer( r: NodeSeq): Customer = {
-		// More flexible XML structure?
-		//Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"createdAt", r\"updatedAt")
-		r match {
-			case <customer>
-					<id>{id}</id>
-					<first_name>{firstName}</first_name>
-					<last_name>{lastName}</last_name>
-					<email>{email}</email>
-					<organization>{organization}</organization>
-					<reference>{reference}</reference>
-					<createdAt>{createdAt}</createdAt>
-					<updatedAt>{updatedAt}</updatedAt>
-				</customer>
-				=> Customer( id, firstName, lastName, email, organization, reference, createdAt, updatedAt)
-			case x => throw new RuntimeException( "Failed matching customer record: " + x)
-		}
+		Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"created_at", r\"updated_at")
 	}
 
 	def listCustomers(): List[ Customer] = {
