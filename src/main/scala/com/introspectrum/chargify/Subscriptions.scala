@@ -114,38 +114,15 @@ trait Subscriptions {
 					<full_number>{creditCard.fullNumber}</full_number>
 					<expiration_month>{creditCard.expirationMonth}</expiration_month>
 					<expiration_year>{creditCard.expirationYear}</expiration_year>
-					{ creditCard.firstName match {
-						case None =>
-						case Some( firstName) => <first_name>{firstName}</first_name>
-					}}
-					{ creditCard.lastName match {
-						case None =>
-						case Some( lastName) => <last_name>{lastName}</last_name>
-					}}
-					{ creditCard.cvv match {
-						case None =>
-						case Some( cvv) => <cvv>{cvv}</cvv>
-					}}
-					{ creditCard.billingAddress match {
-						case None =>
-						case Some( billingAddress) => <billing_address>{billingAddress}</billing_address>
-					}}
-					{ creditCard.billingCity match {
-						case None =>
-						case Some( billingCity) => <billing_city>{billingCity}</billing_city>
-					}}
-					{ creditCard.billingState match {
-						case None =>
-						case Some( billingState) => <billing_state>{billingState}</billing_state>
-					}}
-					{ creditCard.billingZip match {
-						case None =>
-						case Some( billingZip) => <billing_zip>{billingZip}</billing_zip>
-					}}
-					{ creditCard.billingCountry match {
-						case None =>
-						case Some( billingCountry) => <billing_country>{billingCountry}</billing_country>
-					}}
+					{ emit( "first_name", creditCard.firstName)}
+					{ emit( "last_name", creditCard.lastName)}
+					{ emit( "cvv", creditCard.cvv)}
+					{ emit( "billing_address", creditCard.billingAddress)}
+					{ emit( "billing_city", creditCard.billingCity)}
+					{ emit( "billing_state", creditCard.billingState)}
+					{ emit( "billing_zip", creditCard.billingZip)}
+					{ emit( "billing_country", creditCard.billingCountry)}
+					{ emit( "last_name", creditCard.lastName)}
 				</credit_card_attributes>
 			</subscription>
 
@@ -170,38 +147,15 @@ trait Subscriptions {
 							<full_number>{creditCard.fullNumber}</full_number>
 							<expiration_month>{creditCard.expirationMonth}</expiration_month>
 							<expiration_year>{creditCard.expirationYear}</expiration_year>
-							{ creditCard.firstName match {
-								case None =>
-								case Some( firstName) => <first_name>{firstName}</first_name>
-							}}
-							{ creditCard.lastName match {
-								case None =>
-								case Some( lastName) => <last_name>{lastName}</last_name>
-							}}
-							{ creditCard.cvv match {
-								case None =>
-								case Some( cvv) => <cvv>{cvv}</cvv>
-							}}
-							{ creditCard.billingAddress match {
-								case None =>
-								case Some( billingAddress) => <billing_address>{billingAddress}</billing_address>
-							}}
-							{ creditCard.billingCity match {
-								case None =>
-								case Some( billingCity) => <billing_city>{billingCity}</billing_city>
-							}}
-							{ creditCard.billingState match {
-								case None =>
-								case Some( billingState) => <billing_state>{billingState}</billing_state>
-							}}
-							{ creditCard.billingZip match {
-								case None =>
-								case Some( billingZip) => <billing_zip>{billingZip}</billing_zip>
-							}}
-							{ creditCard.billingCountry match {
-								case None =>
-								case Some( billingCountry) => <billing_country>{billingCountry}</billing_country>
-							}}
+							{ emit( "first_name", creditCard.firstName)}
+							{ emit( "last_name", creditCard.lastName)}
+							{ emit( "cvv", creditCard.cvv)}
+							{ emit( "billing_address", creditCard.billingAddress)}
+							{ emit( "billing_city", creditCard.billingCity)}
+							{ emit( "billing_state", creditCard.billingState)}
+							{ emit( "billing_zip", creditCard.billingZip)}
+							{ emit( "billing_country", creditCard.billingCountry)}
+							{ emit( "last_name", creditCard.lastName)}
 						</credit_card_attributes>
 				}}
 			</subscription>

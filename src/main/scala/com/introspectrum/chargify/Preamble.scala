@@ -4,7 +4,7 @@ import java.util.Date
 import net.liftweb.common.Full
 import net.liftweb.util.PCDataXmlParser
 import org.apache.commons.httpclient._
-import scala.xml.{Node,NodeSeq}
+import scala.xml._
 
 object Preamble {
 
@@ -49,6 +49,13 @@ object Preamble {
 
 	implicit def nodeseq2subscription( r: NodeSeq): Subscription = {
 		Subscription( r\"id", r\"state", r\"balance_in_cents", r\"current_period_started_at", r\"current_period_ends_at", r\"trial_started_at", r\"trial_ended_at", r\"activated_at", r\"expires_at", r\"created_at", r\"updated_at", r\"customer", r\"product", r\"credit_card", r\"cancellation_message")
+	}
+
+	def emit( node: String, value: Option[ Any]): NodeSeq = {
+		value match {
+			case None => NodeSeq.Empty
+			case Some( x) => Elem( null, node, null, TopScope, Text( x toString))
+		}
 	}
 
 	def parseReponse( method: HttpMethodBase): Node = {

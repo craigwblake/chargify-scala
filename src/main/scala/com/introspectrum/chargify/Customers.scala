@@ -69,14 +69,8 @@ trait Customers {
 				<email>{email}</email>
 				<first_name>{firstName}</first_name>
 				<last_name>{lastName}</last_name>
-				{ organization match {
-						case Some( organization) => <organization>{organization}</organization>
-						case None =>
-				}}
-				{ reference match {
-						case Some( reference) => <reference>{reference}</reference>
-						case None =>
-				}}
+				{ emit( "organization", organization)}
+				{ emit( "reference", reference)}
 			</customer>
 
 		val method = new PostMethod( "/customers.xml")
@@ -89,26 +83,11 @@ trait Customers {
 	def editCustomer( id: int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], organization: Option[ String], reference: Option[ String]): Unit = {
 		val xml =
 			<customer>
-				{ email match {
-						case Some( email) => <email>{email}</email>
-						case None =>
-				}}
-				{ firstName match {
-						case Some( firstName) => <first_name>{firstName}</first_name>
-						case None =>
-				}}
-				{ lastName match {
-						case Some( lastName) => <last_name>{lastName}</last_name>
-						case None =>
-				}}
-				{ organization match {
-						case Some( organization) => <organization>{organization}</organization>
-						case None =>
-				}}
-				{ reference match {
-						case Some( reference) => <reference>{reference}</reference>
-						case None =>
-				}}
+				{ emit( "email", email)}
+				{ emit( "first_name", firstName)}
+				{ emit( "last_name", lastName)}
+				{ emit( "organization", organization)}
+				{ emit( "reference", reference)}
 			</customer>
 
 		val method = new PutMethod( "/customers/" + id + ".xml")
