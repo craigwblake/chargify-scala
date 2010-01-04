@@ -164,7 +164,7 @@ trait Subscriptions {
 				}}
 			</subscription>
 
-		val method = new PutMethod( "/customers/" + id + ".xml")
+		val method = new PutMethod( "/subscriptions/" + id + ".xml")
 		method.setRequestEntity( new StringRequestEntity( xml, contentType, charset))
 		getClient().executeMethod( method)
 		handleResponseCode( method)
