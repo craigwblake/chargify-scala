@@ -52,7 +52,7 @@ trait Customers {
 		Some( parseReponse( method))
 	}
 
-	def createCustomer( firstName: String, lastName: String, email: String, reference: Option[ String]): Customer = {
+	def createCustomer( firstName: String, lastName: String, email: String, organization: Option[ String], reference: Option[ String]): Customer = {
 		/*
 		getCustomer( email) match {
 			case Some( x) => throw new AlreadyExistsException( "Customer already exists")
@@ -65,6 +65,10 @@ trait Customers {
 				<email>{email}</email>
 				<first_name>{firstName}</first_name>
 				<last_name>{lastName}</last_name>
+				{ organization match {
+						case Some( organization) => <organization>{organization}</organization>
+						case None =>
+				}}
 				{ reference match {
 						case Some( reference) => <reference>{reference}</reference>
 						case None =>
@@ -78,7 +82,7 @@ trait Customers {
 		parseReponse( method)
 	}
 
-	def editCustomer( id: Int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], reference: Option[ String]): Customer = {
+	def editCustomer( id: int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], organization: Option[ String], reference: Option[ String]): Unit = {
 		val xml =
 			<customer>
 				{ email match {
@@ -91,6 +95,10 @@ trait Customers {
 				}}
 				{ lastName match {
 						case Some( lastName) => <last_name>{lastName}</last_name>
+						case None =>
+				}}
+				{ organization match {
+						case Some( organization) => <organization>{organization}</organization>
 						case None =>
 				}}
 				{ reference match {
@@ -107,7 +115,7 @@ trait Customers {
 	}
 
 	case class Customer(
-		id: Int,
+		id: int,
 		firstName: String,
 		lastName: String,
 		email: String,
