@@ -29,17 +29,25 @@ object Preamble {
 			case 401 => throw new AuthenticationFailedException()
 			case 403 => throw new DisabledEndpointException()
 			case 404 => throw new NotFoundException()
-			case 422 => throw new InvalidRequestException()
 			case 500 => throw new InternalServerException()
+			case 422 =>
+				val errors: List[ String] = parseReponse( method) match {
+					case <errors>{ errors @ _*}</errors> =>
+						(for ( error @ <error>{_}</error> <- errors) yield error text).toList
+					case _ => List()
+				}
+				throw new InvalidRequestException( Errors( errors))
 			case _ =>
 		}
 	}
+
+	case class Errors( errors: List[ String])
 
 	case class ChargifyException( message: String) extends RuntimeException( message)
 	case class AlreadyExistsException( m: String) extends ChargifyException( m)
 	case class AuthenticationFailedException extends ChargifyException( "API authentication failed")
 	case class DisabledEndpointException extends ChargifyException( "This endpoint is not enabled")
 	case class NotFoundException extends ChargifyException( "The resource was not found")
-	case class InvalidRequestException extends ChargifyException( "The request was malformed")
+	case class InvalidRequestException( errors: Errors) extends ChargifyException( "The request was invalid")
 	case class InternalServerException extends ChargifyException( "An internal error occurred")
 }

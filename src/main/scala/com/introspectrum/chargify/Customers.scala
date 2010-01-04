@@ -23,7 +23,18 @@ trait Customers {
 		( for ( node <- list\"customer") yield nodeseq2customer( node)) toList
 	}
 
-	def getCustomer( reference: String): Option[ Customer] = {
+	def getCustomerById( id: String): Option[ Customer] = {
+		val method = new GetMethod( "/customers/" + id + ".xml")
+		getClient().executeMethod( method)
+		try {
+			handleResponseCode( method)
+			Some( parseReponse( method))
+		} catch {
+			case e: NotFoundException => None
+		}
+	}
+
+	def getCustomerByReference( reference: String): Option[ Customer] = {
 		val method = new GetMethod( "/customers/lookup.xml?reference=" + reference)
 		getClient().executeMethod( method)
 		try {
@@ -41,20 +52,54 @@ trait Customers {
 		Some( parseReponse( method))
 	}
 
-	def createCustomer( firstName: String, lastName: String, email: String): Customer = {
+	def createCustomer( firstName: String, lastName: String, email: String, reference: Option[ String]): Customer = {
+		/*
 		getCustomer( email) match {
 			case Some( x) => throw new AlreadyExistsException( "Customer already exists")
 			case None =>
 		}
+		*/
 
 		val xml =
 			<customer>
 				<email>{email}</email>
 				<first_name>{firstName}</first_name>
 				<last_name>{lastName}</last_name>
+				{ reference match {
+						case Some( reference) => <reference>{reference}</reference>
+						case None =>
+				}}
 			</customer>
 
 		val method = new PostMethod( "/customers.xml")
+		method.setRequestEntity( new StringRequestEntity( xml, contentType, charset))
+		getClient().executeMethod( method)
+		handleResponseCode( method)
+		parseReponse( method)
+	}
+
+	def editCustomer( id: Int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], reference: Option[ String]): Customer = {
+		val xml =
+			<customer>
+				{ email match {
+						case Some( email) => <email>{email}</email>
+						case None =>
+				}}
+				{ firstName match {
+						case Some( firstName) => <first_name>{firstName}</first_name>
+						case None =>
+				}}
+				{ lastName match {
+						case Some( lastName) => <last_name>{lastName}</last_name>
+						case None =>
+				}}
+				{ reference match {
+						case Some( reference) => <reference>{reference}</reference>
+						case None =>
+				}}
+			</customer>
+
+		val method = new PutMethod( "/customers/" + id + ".xml")
 		method.setRequestEntity( new StringRequestEntity( xml, contentType, charset))
 		getClient().executeMethod( method)
 		handleResponseCode( method)
