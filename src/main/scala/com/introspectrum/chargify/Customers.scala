@@ -6,13 +6,19 @@ import org.apache.commons.httpclient._
 import org.apache.commons.httpclient.methods._
 import scala.xml.{Node,NodeSeq}
 
+case class Customer(
+	id: int,
+	firstName: String,
+	lastName: String,
+	email: String,
+	organization: String,
+	reference: String,
+	createdAt: Date,
+	updatedAt: Date)
+
 trait Customers {
 
 	def getClient(): HttpClient
-
-	implicit def nodeseq2customer( r: NodeSeq): Customer = {
-		Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"created_at", r\"updated_at")
-	}
 
 	def listCustomers(): List[ Customer] = {
 		val method = new GetMethod( "/customers.xml")
@@ -23,7 +29,7 @@ trait Customers {
 		( for ( node <- list\"customer") yield nodeseq2customer( node)) toList
 	}
 
-	def getCustomerById( id: String): Option[ Customer] = {
+	def getCustomerById( id: int): Option[ Customer] = {
 		val method = new GetMethod( "/customers/" + id + ".xml")
 		getClient().executeMethod( method)
 		try {
@@ -49,7 +55,6 @@ trait Customers {
 		val method = new DeleteMethod( "/customers/" + id + ".xml")
 		getClient().executeMethod( method)
 		handleResponseCode( method)
-		Some( parseReponse( method))
 	}
 
 	def createCustomer( firstName: String, lastName: String, email: String, organization: Option[ String], reference: Option[ String]): Customer = {
@@ -111,16 +116,5 @@ trait Customers {
 		method.setRequestEntity( new StringRequestEntity( xml, contentType, charset))
 		getClient().executeMethod( method)
 		handleResponseCode( method)
-		parseReponse( method)
 	}
-
-	case class Customer(
-		id: int,
-		firstName: String,
-		lastName: String,
-		email: String,
-		organization: String,
-		reference: String,
-		createdAt: Date,
-		updatedAt: Date)
 }

@@ -16,6 +16,41 @@ object Preamble {
 	implicit def nodeseq2date( value: NodeSeq) = DateTime.parse( value.first.text)
 	implicit def nodeseq2int( value: NodeSeq) = Integer.parseInt( value.first.text)
 
+	implicit def nodeseq2productfamily( r: NodeSeq): ProductFamily = {
+		ProductFamily( r\"name", r\"handle", r\"accounting_code", r\"description")
+	}
+
+	implicit def nodeseq2product( r: NodeSeq): Product = {
+		Product( r\"price_in_cents", r\"name", r\"handle", r\"description", r\"product_family", r\"accounting_code", r\"interval_unit", r\"interval")
+	}
+
+	implicit def nodeseq2intervalunit( r: NodeSeq): IntervalUnit.Value = IntervalUnit.valueOf( r text) match {
+		case Some( value) => value
+		case None => throw new RuntimeException( "Invalid enumeration value for IntervalUnit: " + ( r text))
+	}
+
+	implicit def nodeseq2customer( r: NodeSeq): Customer = {
+		Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"created_at", r\"updated_at")
+	}
+
+	implicit def nodeseq2type( r: NodeSeq): Type.Value = Type.valueOf( r text) match {
+		case Some( value) => value
+		case None => throw new RuntimeException( "Invalid enumeration value for Type: " + ( r text))
+	}
+
+	implicit def nodeseq2state( r: NodeSeq): State.Value = State.valueOf( r text) match {
+		case Some( value) => value
+		case None => throw new RuntimeException( "Invalid enumeration value for State: " + ( r text))
+	}
+
+	implicit def nodeseq2creditcard( r: NodeSeq): StoredCreditCard = {
+		StoredCreditCard( r\"type", r\"expiration_month", r\"expiration_year", r\"first_name", r\"last_name", r\"masked_card_number")
+	}
+
+	implicit def nodeseq2subscription( r: NodeSeq): Subscription = {
+		Subscription( r\"id", r\"state", r\"balance_in_cents", r\"current_period_started_at", r\"current_period_ends_at", r\"trial_started_at", r\"trial_ended_at", r\"activated_at", r\"expires_at", r\"created_at", r\"updated_at", r\"customer", r\"product", r\"credit_card", r\"cancellation_message")
+	}
+
 	def parseReponse( method: HttpMethodBase): Node = {
 		PCDataXmlParser( method.getResponseBodyAsString()) match {
 			case Full( x) => x( 0)

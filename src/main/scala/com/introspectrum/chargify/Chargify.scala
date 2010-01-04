@@ -8,7 +8,7 @@ import org.apache.commons.httpclient.methods._
 import org.apache.commons.httpclient.protocol.Protocol
 import scala.xml.{Node,NodeSeq}
 
-case class Chargify( key: String, domain: String) extends Customers {
+case class Chargify( key: String, domain: String) extends Customers with Products with Subscriptions {
 
 	val host = new HostConfiguration()
 	host.setHost( domain + ".chargify.com", 443, Protocol.getProtocol( "https"))
