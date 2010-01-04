@@ -6,6 +6,16 @@ import net.liftweb.util.PCDataXmlParser
 import org.apache.commons.httpclient._
 import scala.xml._
 
+case class Errors( errors: List[ String])
+
+case class ChargifyException( message: String) extends RuntimeException( message)
+case class AlreadyExistsException( m: String) extends ChargifyException( m)
+case class AuthenticationFailedException extends ChargifyException( "API authentication failed")
+case class DisabledEndpointException extends ChargifyException( "This endpoint is not enabled")
+case class NotFoundException extends ChargifyException( "The resource was not found")
+case class InvalidRequestException( errors: Errors) extends ChargifyException( "The request was invalid")
+case class InternalServerException extends ChargifyException( "An internal error occurred")
+
 object Preamble {
 
 	val contentType = "application/xml"
@@ -15,6 +25,11 @@ object Preamble {
 	implicit def nodeseq2string( value: NodeSeq) = value.first.text
 	implicit def nodeseq2date( value: NodeSeq) = DateTime.parse( value.first.text)
 	implicit def nodeseq2int( value: NodeSeq) = Integer.parseInt( value.first.text)
+	
+	implicit def nodeseq2dateoption( value: NodeSeq) = value \ "@nil" match {
+		case Text( "true") => Some( DateTime.parse( value.first.text))
+		case _ => None
+	}
 
 	implicit def nodeseq2productfamily( r: NodeSeq): ProductFamily = {
 		ProductFamily( r\"name", r\"handle", r\"accounting_code", r\"description")
@@ -43,18 +58,21 @@ object Preamble {
 		case None => throw new RuntimeException( "Invalid enumeration value for State: " + ( r text))
 	}
 
-	implicit def nodeseq2creditcard( r: NodeSeq): StoredCreditCard = {
-		StoredCreditCard( r\"type", r\"expiration_month", r\"expiration_year", r\"first_name", r\"last_name", r\"masked_card_number")
+	implicit def nodeseq2creditcardoption( r: NodeSeq): Option[ StoredCreditCard] = r match {
+		case NodeSeq.Empty => None
+		case r => Some( StoredCreditCard( r\"type", r\"expiration_month", r\"expiration_year", r\"first_name", r\"last_name", r\"masked_card_number"))
 	}
 
 	implicit def nodeseq2subscription( r: NodeSeq): Subscription = {
 		Subscription( r\"id", r\"state", r\"balance_in_cents", r\"current_period_started_at", r\"current_period_ends_at", r\"trial_started_at", r\"trial_ended_at", r\"activated_at", r\"expires_at", r\"created_at", r\"updated_at", r\"customer", r\"product", r\"credit_card", r\"cancellation_message")
 	}
 
+	def none = None
+
 	def emit( node: String, value: Option[ Any]): NodeSeq = {
 		value match {
 			case None => NodeSeq.Empty
-			case Some( x) => Elem( null, node, null, TopScope, Text( x toString))
+			case Some( x) => Elem( null, node, null, TopScope, Text( String.valueOf( x)))
 		}
 	}
 
@@ -82,14 +100,4 @@ object Preamble {
 			case _ =>
 		}
 	}
-
-	case class Errors( errors: List[ String])
-
-	case class ChargifyException( message: String) extends RuntimeException( message)
-	case class AlreadyExistsException( m: String) extends ChargifyException( m)
-	case class AuthenticationFailedException extends ChargifyException( "API authentication failed")
-	case class DisabledEndpointException extends ChargifyException( "This endpoint is not enabled")
-	case class NotFoundException extends ChargifyException( "The resource was not found")
-	case class InvalidRequestException( errors: Errors) extends ChargifyException( "The request was invalid")
-	case class InternalServerException extends ChargifyException( "An internal error occurred")
 }

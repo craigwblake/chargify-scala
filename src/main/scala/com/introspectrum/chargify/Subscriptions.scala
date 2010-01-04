@@ -11,15 +11,15 @@ case class Subscription(
 	balanceInCents: int,
 	currentPeriodStartedAt: Date,
 	currentPeriodEndsAt: Date,
-	trialStartedAt: Date,
-	trialEndedAt: Date,
+	trialStartedAt: Option[ Date],
+	trialEndedAt: Option[ Date],
 	activateAt: Date,
-	expiresAt: Date,
+	expiresAt: Option[ Date],
 	createdAt: Date,
 	updatedAt: Date,
 	customer: Customer,
 	product: Product,
-	creditCard: StoredCreditCard,
+	creditCard: Option[ StoredCreditCard],
 	cancellationMessage: String
 )
 
@@ -105,25 +105,29 @@ trait Subscriptions {
 		handleResponseCode( method)
 	}
 
-	def createSubscription( product: Product, customer: Customer, creditCard: CreditCard): Subscription = {
+	def createSubscription( product: Product, customer: Customer, creditCard: Option[ CreditCard]): Subscription = {
 		val xml =
 			<subscription>
 				<product_handle>{product.handle}</product_handle>
-				<customer_reference>{customer.id}</customer_reference>
-				<credit_card_attributes>
-					<full_number>{creditCard.fullNumber}</full_number>
-					<expiration_month>{creditCard.expirationMonth}</expiration_month>
-					<expiration_year>{creditCard.expirationYear}</expiration_year>
-					{ emit( "first_name", creditCard.firstName)}
-					{ emit( "last_name", creditCard.lastName)}
-					{ emit( "cvv", creditCard.cvv)}
-					{ emit( "billing_address", creditCard.billingAddress)}
-					{ emit( "billing_city", creditCard.billingCity)}
-					{ emit( "billing_state", creditCard.billingState)}
-					{ emit( "billing_zip", creditCard.billingZip)}
-					{ emit( "billing_country", creditCard.billingCountry)}
-					{ emit( "last_name", creditCard.lastName)}
-				</credit_card_attributes>
+				<customer_reference>{customer.reference}</customer_reference>
+				{ creditCard match {
+					case None =>
+					case Some( creditCard) =>
+						<credit_card_attributes>
+							<full_number>{creditCard.fullNumber}</full_number>
+							<expiration_month>{creditCard.expirationMonth}</expiration_month>
+							<expiration_year>{creditCard.expirationYear}</expiration_year>
+							{ emit( "first_name", creditCard.firstName)}
+							{ emit( "last_name", creditCard.lastName)}
+							{ emit( "cvv", creditCard.cvv)}
+							{ emit( "billing_address", creditCard.billingAddress)}
+							{ emit( "billing_city", creditCard.billingCity)}
+							{ emit( "billing_state", creditCard.billingState)}
+							{ emit( "billing_zip", creditCard.billingZip)}
+							{ emit( "billing_country", creditCard.billingCountry)}
+							{ emit( "last_name", creditCard.lastName)}
+						</credit_card_attributes>
+				}}
 			</subscription>
 
 		val method = new PostMethod( "/subscriptions.xml")
