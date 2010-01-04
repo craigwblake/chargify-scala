@@ -4,7 +4,6 @@ import com.introspectrum.chargify.Preamble._
 import java.util.Date
 import org.apache.commons.httpclient._
 import org.apache.commons.httpclient.methods._
-import scala.xml.{Node,NodeSeq}
 
 case class Customer(
 	id: int,
