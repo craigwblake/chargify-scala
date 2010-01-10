@@ -13,7 +13,7 @@ case class AlreadyExistsException( m: String) extends ChargifyException( m)
 case class AuthenticationFailedException extends ChargifyException( "API authentication failed")
 case class DisabledEndpointException extends ChargifyException( "This endpoint is not enabled")
 case class NotFoundException extends ChargifyException( "The resource was not found")
-case class InvalidRequestException( errors: Errors) extends ChargifyException( "The request was invalid")
+case class InvalidRequestException( errors: Errors) extends ChargifyException( "The request was invalid: " + errors)
 case class InternalServerException extends ChargifyException( "An internal error occurred")
 
 object Preamble {

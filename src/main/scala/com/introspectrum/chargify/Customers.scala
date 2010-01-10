@@ -57,13 +57,6 @@ trait Customers {
 	}
 
 	def createCustomer( firstName: String, lastName: String, email: String, organization: Option[ String], reference: Option[ String]): Customer = {
-		/*
-		getCustomer( email) match {
-			case Some( x) => throw new AlreadyExistsException( "Customer already exists")
-			case None =>
-		}
-		*/
-
 		val xml =
 			<customer>
 				<email>{email}</email>
