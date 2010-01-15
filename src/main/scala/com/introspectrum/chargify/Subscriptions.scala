@@ -13,7 +13,7 @@ case class Subscription(
 	currentPeriodEndsAt: Date,
 	trialStartedAt: Option[ Date],
 	trialEndedAt: Option[ Date],
-	activateAt: Date,
+	activatedAt: Option[ Date],
 	expiresAt: Option[ Date],
 	createdAt: Date,
 	updatedAt: Date,

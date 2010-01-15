@@ -25,7 +25,7 @@ object Preamble {
 	implicit def nodeseq2string( value: NodeSeq) = value.first.text
 	implicit def nodeseq2date( value: NodeSeq) = DateTime.parse( value.first.text)
 	implicit def nodeseq2int( value: NodeSeq) = Integer.parseInt( value.first.text)
-	
+
 	implicit def nodeseq2dateoption( value: NodeSeq) = value \ "@nil" match {
 		case Text( "true") => Some( DateTime.parse( value.first.text))
 		case _ => None
