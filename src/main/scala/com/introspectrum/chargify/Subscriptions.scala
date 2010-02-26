@@ -55,11 +55,12 @@ object Type extends Enumeration {
 object State extends Enumeration {
 	val Trialing = Value( "trialing")
 	val Active = Value( "active")
-	val Soft_failure = Value( "soft_failure")
+	val SoftFailure = Value( "soft_failure")
 	val PastDue = Value( "past_due")
 	val Suspended = Value( "suspended")
 	val Closed = Value( "closed")
 	val Expired = Value( "expired")
+	val Canceled = Value( "canceled")
 }
 
 trait Subscriptions {
