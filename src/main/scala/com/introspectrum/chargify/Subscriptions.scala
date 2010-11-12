@@ -86,7 +86,7 @@ trait Subscriptions {
 		}
 	}
 
-	def deleteSubscription( id: String, reason: Option[ String]) = {
+	def deleteSubscription( id: int, reason: Option[ String]) = {
 		val method = new DeleteMethod( "/subscriptions/" + id + ".xml")
 
 		// HttpClient does not support request entities with the DELETE operation

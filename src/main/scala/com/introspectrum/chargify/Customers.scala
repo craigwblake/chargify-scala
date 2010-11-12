@@ -50,7 +50,7 @@ trait Customers {
 		}
 	}
 
-	def deleteCustomer( id: String) = {
+	def deleteCustomer( id: int) = {
 		val method = new DeleteMethod( "/customers/" + id + ".xml")
 		getClient().executeMethod( method)
 		handleResponseCode( method)
