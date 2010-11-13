@@ -6,7 +6,7 @@ import org.apache.commons.httpclient._
 import org.apache.commons.httpclient.methods._
 
 case class Customer(
-	id: int,
+	id: Int,
 	firstName: String,
 	lastName: String,
 	email: String,
@@ -28,7 +28,7 @@ trait Customers {
 		( for ( node <- list\"customer") yield nodeseq2customer( node)) toList
 	}
 
-	def getCustomerById( id: int): Option[ Customer] = {
+	def getCustomerById( id: Int): Option[ Customer] = {
 		val method = new GetMethod( "/customers/" + id + ".xml")
 		getClient().executeMethod( method)
 		try {
@@ -50,7 +50,7 @@ trait Customers {
 		}
 	}
 
-	def deleteCustomer( id: int) = {
+	def deleteCustomer( id: Int) = {
 		val method = new DeleteMethod( "/customers/" + id + ".xml")
 		getClient().executeMethod( method)
 		handleResponseCode( method)
@@ -73,7 +73,7 @@ trait Customers {
 		parseReponse( method)
 	}
 
-	def editCustomer( id: int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], organization: Option[ String], reference: Option[ String]): Unit = {
+	def editCustomer( id: Int, firstName: Option[ String], lastName: Option[ String], email: Option[ String], organization: Option[ String], reference: Option[ String]): Unit = {
 		val xml =
 			<customer>
 				{ emit( "email", email)}

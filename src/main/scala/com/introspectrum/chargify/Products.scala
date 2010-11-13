@@ -12,14 +12,14 @@ case class ProductFamily(
 )
 
 case class Product(
-	priceInCents: int,
+	priceInCents: Int,
 	name: String,
 	handle: String,
 	description: String,
 	productFamily: ProductFamily,
 	accountingCode: String,
 	intervalUnit: IntervalUnit.Value,
-	interval: int
+	interval: Int
 )
 
 object IntervalUnit extends Enumeration {
@@ -40,7 +40,7 @@ trait Products {
 		( for ( node <- list\"product") yield nodeseq2product( node)) toList
 	}
 
-	def getProductById( id: int): Option[ Product] = {
+	def getProductById( id: Int): Option[ Product] = {
 		val method = new GetMethod( "/products/" + id + ".xml")
 		getClient().executeMethod( method)
 		try {

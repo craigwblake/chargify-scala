@@ -6,9 +6,9 @@ import org.apache.commons.httpclient._
 import org.apache.commons.httpclient.methods._
 
 case class Subscription(
-	id: int,
+	id: Int,
 	state: State.Value,
-	balanceInCents: int,
+	balanceInCents: Int,
 	currentPeriodStartedAt: Date,
 	currentPeriodEndsAt: Date,
 	trialStartedAt: Option[ Date],
@@ -27,20 +27,20 @@ case class CreditCard(
 	firstName: Option[ String],
 	lastName: Option[ String],
 	fullNumber: String,
-	expirationMonth: int,
-	expirationYear: int,
-	cvv: Option[ int],
+	expirationMonth: Int,
+	expirationYear: Int,
+	cvv: Option[ Int],
 	billingAddress: Option[ String],
 	billingCity: Option[ String],
 	billingState: Option[ String],
-	billingZip: Option[ int],
+	billingZip: Option[ Int],
 	billingCountry: Option[ String]
 )
 
 case class StoredCreditCard(
 	cardType: Type.Value,
-	expirationMonth: int,
-	expirationYear: int,
+	expirationMonth: Int,
+	expirationYear: Int,
 	firstName: String,
 	lastName: String,
 	maskedCardNumber: String
@@ -67,7 +67,7 @@ trait Subscriptions {
 
 	def getClient(): HttpClient
 
-	def listSubscriptions( customer: int): List[ Subscription] = {
+	def listSubscriptions( customer: Int): List[ Subscription] = {
 		val method = new GetMethod( "/customers/" + customer + "/subscriptions.xml")
 		getClient().executeMethod( method)
 		handleResponseCode( method)
@@ -75,7 +75,7 @@ trait Subscriptions {
 		( for ( node <- list\"subscription") yield nodeseq2subscription( node)) toList
 	}
 
-	def getSubscription( id: int): Option[ Subscription] = {
+	def getSubscription( id: Int): Option[ Subscription] = {
 		val method = new GetMethod( "/subscriptions/" + id + ".xml")
 		getClient().executeMethod( method)
 		try {
@@ -86,7 +86,7 @@ trait Subscriptions {
 		}
 	}
 
-	def deleteSubscription( id: int, reason: Option[ String]) = {
+	def deleteSubscription( id: Int, reason: Option[ String]) = {
 		val method = new DeleteMethod( "/subscriptions/" + id + ".xml")
 
 		// HttpClient does not support request entities with the DELETE operation
@@ -138,7 +138,7 @@ trait Subscriptions {
 		parseReponse( method)
 	}
 
-	def editSubscription( id: int, product: Option[ Product], creditCard: Option[ CreditCard]): Unit = {
+	def editSubscription( id: Int, product: Option[ Product], creditCard: Option[ CreditCard]): Unit = {
 		val xml =
 			<subscription>
 				{ product match {
