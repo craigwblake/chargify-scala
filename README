@@ -1,0 +1,36 @@
+chargify-scala
+==============
+
+This is a Scala/Java binding for the Chargify API services.
+
+Scala makes no guarantees of binary compatibility of compiled modules
+with subsequent versions of Scala.  So it is essential that you
+bundle the same jars used for compilation.  As of this writing,
+chargify-scala is compiled against Scala 2.8.0 and Lift 2.1, and
+these dependencies are:
+
+  scala-library-2.8.0.jar
+  lift-common_2.8.0-2.1.jar
+  lift-util_2.8.0-2.1.jar
+  lift-actor_2.8.0-2.1.jar
+
+
+Notes for use from Java:
+------------------------
+
+chargify-scala is trivially used from Java code.  You should be
+aware of some quirks.
+
+  * Scala's class libraries do not use the Java libraries, although
+    it does provide equivalents with similar names.  For example,
+    several of the methods return lists of items, with type
+    scala.collection.immutable.List.  The instances of this list
+    can be iterated by requesting the list's iterator, which has
+    a similar protocol to java.util.Iterator.
+
+  * Many of chargify-scala's methods follow the Scala practice of
+    using Option[A] to pass optional parameters.  In Scala, you
+    pass an instance of 'None' for no parameter.  This instance
+    cannot be directly obtained from Java, but an instance is
+    provided in the static field 'none' on
+    com.introspectrum.chargify.Preamble.
