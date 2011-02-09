@@ -48,7 +48,7 @@ object Preamble {
 		Customer( r\"id", r\"first_name", r\"last_name", r\"email", r\"organization", r\"reference", r\"created_at", r\"updated_at")
 	}
 
-	implicit def nodeseq2type( r: NodeSeq): Type.Value = Type.valueOf( r text) match {
+	implicit def nodeseq2cardtype( r: NodeSeq): Type.Value = Type.valueOf( r text) match {
 		case Some( value) => value
 		case None => throw new RuntimeException( "Invalid enumeration value for Type: " + ( r text))
 	}
@@ -60,7 +60,7 @@ object Preamble {
 
 	implicit def nodeseq2creditcardoption( r: NodeSeq): Option[ StoredCreditCard] = r match {
 		case NodeSeq.Empty => None
-		case r => Some( StoredCreditCard( r\"type", r\"expiration_month", r\"expiration_year", r\"first_name", r\"last_name", r\"masked_card_number"))
+		case r => Some( StoredCreditCard( r\"card_type", r\"expiration_month", r\"expiration_year", r\"first_name", r\"last_name", r\"masked_card_number"))
 	}
 
 	implicit def nodeseq2subscription( r: NodeSeq): Subscription = {
